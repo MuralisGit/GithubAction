@@ -1,38 +1,25 @@
-name: SuperLinter
+name: Super-Linter
+
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
 
-# Grant the workflow necessary permissions
 permissions:
-  contents: read # Required to checkout the repository code
-  packages: read # Required for downloading the linter container
-  statuses: write # Required to report the status of individual linters on a PR
+  contents: read
+  statuses: write
+  checks: write
 
 jobs:
-  lint:
-    name: Lint Code Base
+  super-lint:
+    name: Lint code base
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
-        # Uses the actions/checkout@v4 action to fetch your repository's code.
-        # fetch-depth: 0 is important to lint the entire history/diffs.
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Run Super-Linter
-        # Uses the official super-linter/super-linter action.
-        # NOTE: Pin to a specific version hash for stability (e.g., @v6.0.0 or a specific commit SHA).
-        uses: super-linter/super-linter@v6.0.0
+        uses: super-linter/super-linter@v6
         env:
-          # The name of your default branch
           DEFAULT_BRANCH: main
-          # Automatically uses the GitHub-provided token for authentication
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Optional: Set to false if you only want to validate new/changed code in a PR
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_NATURAL_LANGUAGE: false
